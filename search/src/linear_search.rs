@@ -1,4 +1,5 @@
-use std::cmp;
+use std::cmp::{Ord, Ordering};
+use std::fmt::Debug;
 
 /// simple linear search
 /// - input
@@ -7,12 +8,12 @@ use std::cmp;
 ///   - x: target element
 pub fn search<T>(a: &[T], n: usize, x: T) -> Option<usize>
 where
-    T: std::cmp::Ord,
+    T: Ord + Debug,
 {
     let mut answer = None;
     for i in 0..n {
         match a[i].partial_cmp(&x) {
-            Some(cmp::Ordering::Equal) => answer = Some(i),
+            Some(Ordering::Equal) => answer = Some(i),
             _ => continue,
         }
     }
