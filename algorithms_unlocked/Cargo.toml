@@ -1,2 +1,2 @@
 [workspace]
-members = ["search"]
+members = ["search", "sort"]
