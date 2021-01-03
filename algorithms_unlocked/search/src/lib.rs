@@ -3,6 +3,8 @@
 
 /// efficient linear search
 pub mod better_linear_search;
+/// binary search
+pub mod binary_search;
 /// simple linear search
 pub mod linear_search;
 /// recursive implementation for linear search
