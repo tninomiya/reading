@@ -70,4 +70,11 @@ mod tests {
         sort(a, 0, n - 1);
         assert_eq!(a, &[2, 3, 5, 6, 7, 9, 10, 11, 12, 14]);
     }
+
+    #[test]
+    fn tempty_sort_test() {
+        let a: &mut [i64] = &mut [];
+        sort(a, 0, 0);
+        assert_eq!(a, &[]);
+    }
 }
