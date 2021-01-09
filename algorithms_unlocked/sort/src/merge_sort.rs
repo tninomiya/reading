@@ -5,49 +5,41 @@ use std::fmt::Debug;
 /// - input
 ///   - a: target array
 ///   - p, r: starting and ending indices of a subarray of a
-pub fn sort<T>(a: &mut [T], p: usize, r: usize)
+pub fn sort<T>(a: &mut [T], head: usize, tail: usize)
 where
     T: Ord + Debug + Clone,
 {
-    println!("divide: p: {}, r: {}", p, r);
-    // subarray doesn't have multiple elements to be sorted
-    if p >= r {
+    if tail == head {
         return;
     }
-    let q = (p + r) / 2;
-    println!("pivot: {}", q);
-    sort(a, p, q);
-    sort(a, q + 1, r);
-    merge(a, p, q, r);
+    let sentinel = (head + tail) / 2;
+    sort(a, head, sentinel);
+    sort(a, sentinel + 1, tail);
+    merge(a, head, sentinel, tail);
 }
 
-fn merge<T>(a: &mut [T], low: usize, pivot: usize, high: usize)
+fn merge<T>(a: &mut [T], head: usize, sentinel: usize, tail: usize)
 where
     T: Ord + Debug + Clone,
 {
-    let former = &a[low..=pivot].to_vec();
-    let later = &a[(pivot + 1)..=high].to_vec();
-    let mut former_index = 0;
-    let mut later_index = 0;
-    let former_len = pivot - low;
-    let later_len = high - pivot;
-    for k in low..=high {
-        // pick up the next element from the former part of subarray
-        if (former_index <= former_len)
-            && (
-                // the later part is already consumed.
-                later_index >= later_len ||
-                // the next element in the former part is smaller than the one in the later part
-                former[former_index] <= later[later_index]
-            )
-        {
-            a[k] = former[former_index].clone();
-            former_index += 1;
+    let left = a[head..=sentinel].to_vec();
+    let right = a[(sentinel + 1)..=tail].to_vec();
+
+    let mut left_h = 0;
+    let mut right_h = 0;
+    let left_t = left.len() - 1;
+    let right_t = right.len() - 1;
+    let mut i = 0;
+
+    while right_h <= right_t || left_h <= left_t {
+        if right_h > right_t || (left_h <= left_t && left[left_h] < right[right_h]) {
+            a[head + i] = left[left_h].clone();
+            left_h += 1;
         } else {
-            // pick up an element from the later part of subarray
-            a[k] = later[later_index].clone();
-            later_index += 1;
+            a[head + i] = right[right_h].clone();
+            right_h += 1;
         }
+        i += 1;
     }
 }
 
