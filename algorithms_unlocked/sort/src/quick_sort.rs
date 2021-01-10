@@ -31,14 +31,15 @@ where
     T: Ord + Debug,
 {
     let mut larger_h = head;
+    let pos_pivot = tail;
     for u in head..tail {
-        if a[u] <= a[tail] {
+        if a[u] <= a[pos_pivot] {
             a.swap(larger_h, u);
             larger_h += 1;
         }
     }
 
-    a.swap(larger_h, tail);
+    a.swap(larger_h, pos_pivot);
     larger_h
 }
 
