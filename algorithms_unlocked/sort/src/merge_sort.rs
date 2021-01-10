@@ -1,29 +1,37 @@
+use super::helper;
 use std::cmp::Ord;
 use std::fmt::Debug;
 
 /// merge sort
+pub fn sort<T>(a: &mut [T])
+where
+    T: Ord + Debug + Clone,
+{
+    merge_sort(a, 0, helper::safe_subtract(a.len(), 1));
+}
+
 /// - input
 ///   - a: target array
 ///   - p, r: starting and ending indices of a subarray of a
-pub fn sort<T>(a: &mut [T], head: usize, tail: usize)
+fn merge_sort<T>(a: &mut [T], head: usize, tail: usize)
 where
     T: Ord + Debug + Clone,
 {
     if tail == head {
         return;
     }
-    let sentinel = (head + tail) / 2;
-    sort(a, head, sentinel);
-    sort(a, sentinel + 1, tail);
-    merge(a, head, sentinel, tail);
+    let pivot = (head + tail) / 2;
+    merge_sort(a, head, pivot);
+    merge_sort(a, pivot + 1, tail);
+    merge(a, head, pivot, tail);
 }
 
-fn merge<T>(a: &mut [T], head: usize, sentinel: usize, tail: usize)
+fn merge<T>(a: &mut [T], head: usize, pivot: usize, tail: usize)
 where
     T: Ord + Debug + Clone,
 {
-    let left = a[head..=sentinel].to_vec();
-    let right = a[(sentinel + 1)..=tail].to_vec();
+    let left = a[head..=pivot].to_vec();
+    let right = a[(pivot + 1)..=tail].to_vec();
 
     let mut left_h = 0;
     let mut right_h = 0;
@@ -50,23 +58,21 @@ mod tests {
     #[test]
     fn touple_sort_test() {
         let a = &mut [12, 9];
-        let n = a.len();
-        sort(a, 0, n - 1);
+        sort(a);
         assert_eq!(a, &[9, 12]);
     }
 
     #[test]
     fn sort_test() {
         let a = &mut [12, 9, 3, 7, 14, 11, 6, 2, 10, 5];
-        let n = a.len();
-        sort(a, 0, n - 1);
+        sort(a);
         assert_eq!(a, &[2, 3, 5, 6, 7, 9, 10, 11, 12, 14]);
     }
 
     #[test]
     fn tempty_sort_test() {
         let a: &mut [i64] = &mut [];
-        sort(a, 0, 0);
+        sort(a);
         assert_eq!(a, &[]);
     }
 }

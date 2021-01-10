@@ -1,6 +1,7 @@
 #![warn(missing_docs)]
 //! sort algorithms
 
+mod helper;
 /// simple insertion sort
 pub mod insertion_sort;
 /// merge sort
